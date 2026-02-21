@@ -30,7 +30,6 @@
     <Folder Include="Application\Addresses\Queries\" />
     <Folder Include="Application\Currency\Commands\" />
     <Folder Include="Application\Currency\Conversion\" />
-    <Folder Include="Application\Users\Commands\" />
     <Folder Include="Application\Users\Queries\" />
   </ItemGroup>
 
