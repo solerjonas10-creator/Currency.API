@@ -10,5 +10,11 @@ namespace Currency.API.Data
         public DbSet<Models.Currency> Currencies { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
