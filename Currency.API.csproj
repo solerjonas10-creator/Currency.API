@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Application\Currency\Commands\" />
-    <Folder Include="Application\Currency\Conversion\" />
   </ItemGroup>
 
 </Project>

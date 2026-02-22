@@ -11,6 +11,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Currency.API.Application.Currency.Queries;
+using Currency.API.Application.Currency.Conversion;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -167,5 +168,14 @@ app.MapGet("/GET/currencies", async (IMediator mediator) =>
     return Results.Ok(currencies);
 })
 .WithName("GetCurrencies");
+
+// POST: Conversion de divisas
+app.MapPost("/POST/currency/convert", async (CurrencyConversionDTO dto, IMediator mediator) => {
+    var convert = new CurrencyConversionCalculate(dto);
+    var converted = await mediator.Send(convert);
+
+    return Results.Ok(converted);
+})
+.WithName("CalculateConversion");
 
 app.Run();
