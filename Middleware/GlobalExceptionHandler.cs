@@ -48,7 +48,20 @@ public class GlobalExceptionHandler : IExceptionHandler
             return true;
         }
 
-        // Caso 3: Error genérico (500)
+        // Error 404
+        if (exception is KeyNotFoundException)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+            await httpContext.Response.WriteAsJsonAsync(new ProblemDetails
+            {
+                Status = StatusCodes.Status404NotFound,
+                Title = "No encontrado",
+                Detail = exception.Message
+            }, cancellationToken);
+            return true;
+        }
+
+        // Error genérico (500)
         return false;
     }
 }
