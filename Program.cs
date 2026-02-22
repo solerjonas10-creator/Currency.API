@@ -1,5 +1,7 @@
 using Currency.API.Application.Users.Commands;
 using Currency.API.Application.Users.Queries;
+using Currency.API.Application.Addresses.Commands;
+using Currency.API.Application.Addresses.Queries;
 using Currency.API.Data;
 using Currency.API.Middleware;
 using Currency.API.Models;
@@ -103,5 +105,24 @@ app.MapDelete("/DELETE/user/{id:int}", async (int id, IMediator mediator) =>
         : Results.NotFound(new { message = $"No se encontró el usuario con ID {id}." });
 })
 .WithName("DeleteUser");
+
+// POST: Crear Address para usuario
+app.MapPost("/POST/users/{userId:int}/addresses", async (int userId, AddressDTO dto, IMediator mediator) =>
+{
+    var command = new CreateAddressCommand(userId, dto);
+    var addressId = await mediator.Send(command);
+    return Results.Created($"/api/users/{userId}/addresses/{addressId}", addressId);
+})
+.WithName("CreateAddressForUser");
+
+// GET: Listar Addresses de un usuario
+app.MapGet("/GET/users/{userId:int}/addresses", async (int userId, IMediator mediator) =>
+{
+    var query = new GetAddressesQuery(userId);
+    var addresses = await mediator.Send(query);
+
+    return Results.Ok(addresses);
+})
+.WithName("GetUserAddresses");
 
 app.Run();
