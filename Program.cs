@@ -93,4 +93,15 @@ app.MapPut("/PUT/user/{id:int}", async (int id, UpdateUserDTO dto, IMediator med
 })
 .WithName("UpdateUser");
 
+// DELETE: Eliminar usuario segun ID
+app.MapDelete("/DELETE/user/{id:int}", async (int id, IMediator mediator) =>
+{
+    var deleted = await mediator.Send(new DeleteUserCommand(id));
+
+    return deleted
+        ? Results.NoContent()
+        : Results.NotFound(new { message = $"No se encontró el usuario con ID {id}." });
+})
+.WithName("DeleteUser");
+
 app.Run();
