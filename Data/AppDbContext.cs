@@ -7,6 +7,8 @@ namespace Currency.API.Data
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Address> Addresses { get; set; }
+
+        // OBS: Uso Models.Currency en toda la API en vez de Solo Currency, porque mi namespace tambien se llama Currency, lo que crea conflicto...
         public DbSet<Models.Currency> Currencies { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
@@ -14,6 +16,8 @@ namespace Currency.API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<Models.Currency>().HasIndex(u => u.Code).IsUnique();
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Address>(entity =>
