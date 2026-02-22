@@ -1,4 +1,5 @@
 using Currency.API.Application.Users.Commands;
+using Currency.API.Application.Users.Queries;
 using Currency.API.Data;
 using Currency.API.Middleware;
 using Currency.API.Models.DTOs;
@@ -49,12 +50,34 @@ app.UseHttpsRedirection();
 app.UseExceptionHandler();
 
 // POST: Crear un usuario
-app.MapPost("/api/users", async (UserDTO dto, IMediator mediator) =>
+app.MapPost("/POST/users", async (UserDTO dto, IMediator mediator) =>
 {
     var command = new CreateUserCommand(dto);
     var userId = await mediator.Send(command);
     return Results.Created($"/api/users/{userId}", userId);
 })
 .WithName("CreateUser");
+
+// GET: Listar usuarios
+app.MapGet("/GET/users", async (bool? isActive, IMediator mediator) =>
+{
+    var query = new GetUsersQuery(isActive);
+    var users = await mediator.Send(query);
+
+    return Results.Ok(users);
+})
+.WithName("GetUsers");
+
+// GET: Obtener usuario segun ID
+app.MapGet("/GET/users/{id:int}", async (int id, IMediator mediator) =>
+{
+    var user = await mediator.Send(new GetUserByIdQuery(id));
+
+    // Si es nulo, retorna 404. Si existe, retorna 200 con el usuario.
+    return user is not null
+        ? Results.Ok(user)
+        : Results.NotFound(new { message = $"Usuario con ID {id} no encontrado." });
+})
+.WithName("GetUserById");
 
 app.Run();
