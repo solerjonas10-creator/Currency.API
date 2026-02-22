@@ -137,4 +137,15 @@ app.MapPut("/PUT/addresses/{id:int}", async (int id, AddressDTO dto, IMediator m
 })
 .WithName("UpdateAddress");
 
+// DELETE: Eliminar Address segun ID
+app.MapDelete("/DELETE/addresses/{id:int}", async (int id, IMediator mediator) =>
+{
+    var deleted = await mediator.Send(new DeleteAddressCommand(id));
+
+    return deleted
+        ? Results.NoContent()
+        : Results.NotFound(new { message = $"No se encontró el Address con ID {id}." });
+})
+.WithName("DeleteAddress");
+
 app.Run();
