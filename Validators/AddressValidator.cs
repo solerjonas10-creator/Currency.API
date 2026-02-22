@@ -24,4 +24,18 @@ namespace Currency.API.Validators
             RuleFor(x => x.addressDTO.ZipCode).NotEmpty();
         }
     }
+
+    public class UpdateAddressValidator : AbstractValidator<UpdateAddressCommand>
+    {
+        private readonly AppDbContext _db;
+        public UpdateAddressValidator(AppDbContext db)
+        {
+            _db = db;
+
+            RuleFor(x => x.addressDTO.Street).NotEmpty();
+            RuleFor(x => x.addressDTO.City).NotEmpty();
+            RuleFor(x => x.addressDTO.Country).NotEmpty();
+            RuleFor(x => x.addressDTO.ZipCode).NotEmpty();
+        }
+    }
 }

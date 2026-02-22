@@ -125,4 +125,16 @@ app.MapGet("/GET/users/{userId:int}/addresses", async (int userId, IMediator med
 })
 .WithName("GetUserAddresses");
 
+// PUT: Actualizar Address segun ID
+app.MapPut("/PUT/addresses/{id:int}", async (int id, AddressDTO dto, IMediator mediator) =>
+{
+    var command = new UpdateAddressCommand(id, dto);
+    var updated = await mediator.Send(command);
+
+    return updated
+        ? Results.NoContent()
+        : Results.NotFound(new { message = $"Address con ID {id} no encontrado." });
+})
+.WithName("UpdateAddress");
+
 app.Run();
