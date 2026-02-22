@@ -4,16 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Currency.API.Models
 {
-    public class Currency : CurrencyDTO
+    public class Currency
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
-        //propiedades heredadas de CurrencyDTO
-        //public required string Name { get; set; }
-        //public required string Code { get; set; }
-        //public required decimal RateToBase { get; set; }
+        public required string Name { get; set; }
+        public required string Code { get; set; }
+        public required decimal RateToBase { get; set; }
         
     }
 }
