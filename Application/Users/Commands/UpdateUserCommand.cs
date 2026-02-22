@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace Currency.API.Application.Users.Commands;
 
-public record UpdateUserCommand(int Id, UserDTO UserDto) : IRequest<bool>;
+public record UpdateUserCommand(int Id, UpdateUserDTO UserDto) : IRequest<bool>;
 
 public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, bool>
 {
@@ -43,6 +43,11 @@ public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, bool>
         {
             user.Password = Convert.ToBase64String(System.Security.Cryptography.SHA256.HashData(
                 System.Text.Encoding.UTF8.GetBytes(request.UserDto.Password)));
+        }
+
+        if (request.UserDto.IsActive.HasValue)
+        {
+            user.IsActive = request.UserDto.IsActive.Value;
         }
 
         await _db.SaveChangesAsync(cancellationToken);

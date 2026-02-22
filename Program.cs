@@ -82,7 +82,7 @@ app.MapGet("/GET/users/{id:int}", async (int id, IMediator mediator) =>
 .WithName("GetUserById");
 
 // PUT: Actualizar usuario segun ID
-app.MapPut("/PUT/user/{id:int}", async (int id, UserDTO dto, IMediator mediator) =>
+app.MapPut("/PUT/user/{id:int}", async (int id, UpdateUserDTO dto, IMediator mediator) =>
 {
     var command = new UpdateUserCommand(id, dto);
     var updated = await mediator.Send(command);
