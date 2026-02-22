@@ -53,6 +53,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
+app.UseMiddleware<ApiKeyMiddleware>();
 
 // POST: Crear un usuario
 app.MapPost("/POST/users", async (UserDTO dto, IMediator mediator) =>
