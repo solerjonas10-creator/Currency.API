@@ -10,6 +10,7 @@ using Currency.API.Validators;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Currency.API.Application.Currency.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -156,5 +157,15 @@ app.MapPost("/POST/currencies", async (CurrencyDTO dto, IMediator mediator) =>
     return Results.Created($"/api/currencies/{currencyId}", currencyId);
 })
 .WithName("CreateCurrency");
+
+// GET: Listar currencies / monedas
+app.MapGet("/GET/currencies", async (IMediator mediator) =>
+{
+    var query = new GetCurrenciesQuery();
+    var currencies = await mediator.Send(query);
+
+    return Results.Ok(currencies);
+})
+.WithName("GetCurrencies");
 
 app.Run();
