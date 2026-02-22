@@ -25,4 +25,16 @@ namespace Currency.API.Validators
             RuleFor(x => x.userDTO.Password).NotEmpty();
         }
     }
+    public class UpdateUserValidator : AbstractValidator<UpdateUserCommand>
+    {
+        public UpdateUserValidator(AppDbContext db)
+        {
+            RuleFor(x => x.UserDto.Email)
+            .EmailAddress().WithMessage("El formato del email no es válido.")
+            .MustAsync(async (command, email, cancellation) =>
+                !await db.Users.AnyAsync(u => u.Email == email && u.Id != command.Id, cancellation))
+            .WithMessage("El email ya está siendo usado por otro usuario.")
+            .When(x => !string.IsNullOrWhiteSpace(x.UserDto.Email)); // Valida si no viene vacío el campo
+        }
+    }
 }

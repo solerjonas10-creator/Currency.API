@@ -2,6 +2,7 @@ using Currency.API.Application.Users.Commands;
 using Currency.API.Application.Users.Queries;
 using Currency.API.Data;
 using Currency.API.Middleware;
+using Currency.API.Models;
 using Currency.API.Models.DTOs;
 using Currency.API.Validators;
 using FluentValidation;
@@ -79,5 +80,17 @@ app.MapGet("/GET/users/{id:int}", async (int id, IMediator mediator) =>
         : Results.NotFound(new { message = $"Usuario con ID {id} no encontrado." });
 })
 .WithName("GetUserById");
+
+// PUT: Actualizar usuario segun ID
+app.MapPut("/PUT/user/{id:int}", async (int id, UserDTO dto, IMediator mediator) =>
+{
+    var command = new UpdateUserCommand(id, dto);
+    var updated = await mediator.Send(command);
+
+    return updated
+        ? Results.NoContent()
+        : Results.NotFound(new { message = $"Usuario con ID {id} no encontrado." });
+})
+.WithName("UpdateUser");
 
 app.Run();
