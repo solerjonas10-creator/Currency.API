@@ -148,4 +148,13 @@ app.MapDelete("/DELETE/addresses/{id:int}", async (int id, IMediator mediator) =
 })
 .WithName("DeleteAddress");
 
+// POST: Crear una currency / moneda
+app.MapPost("/POST/currencies", async (CurrencyDTO dto, IMediator mediator) =>
+{
+    var command = new CreateCurrencyCommand(dto);
+    var currencyId = await mediator.Send(command);
+    return Results.Created($"/api/currencies/{currencyId}", currencyId);
+})
+.WithName("CreateCurrency");
+
 app.Run();
