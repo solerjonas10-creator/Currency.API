@@ -2,10 +2,9 @@
 {
     public class AddressDTO
     {
-        public required int UserId { get; set; }
-        public required string Street { get; set; }
-        public required string City { get; set; }
-        public required string Country { get; set; }
-        public required string ZipCode { get; set; }
+        public required string Street { get; set; } = "Calle";
+        public required string City { get; set; } = "Asunción";
+        public required string Country { get; set; } = "Paraguay";
+        public required string ZipCode { get; set; } = "";
     }
 }
