@@ -209,6 +209,17 @@ app.MapPut("/currencies/{id:int}", async (int id, CurrencyDTO dto, IMediator med
     return updated
         ? Results.NoContent()
         : Results.NotFound(new { message = $"Currency con ID {id} no encontrado." });
-});
+})
+.WithName("UpdateCurrency");
+
+// DELETE: Eliminar currency segun ID
+app.MapDelete("/currencies/{id:int}", async (int id, IMediator mediator) =>
+{
+    var deleted = await mediator.Send(new DeleteCurrencyCommand(id));
+    return deleted
+        ? Results.NoContent()
+        : Results.NotFound(new { message = $"No se encontró la currency con ID {id}." });
+})
+.WithName("DeleteCurrency");
 
 app.Run();
