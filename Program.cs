@@ -1,5 +1,6 @@
 using Currency.API.Application.Addresses.Commands;
 using Currency.API.Application.Addresses.Queries;
+using Currency.API.Application.Currency.Commands;
 using Currency.API.Application.Currency.Conversion;
 using Currency.API.Application.Currency.Queries;
 using Currency.API.Application.Users.Commands;
@@ -70,6 +71,8 @@ app.UseHttpsRedirection();
 app.UseExceptionHandler();
 app.UseMiddleware<ApiKeyMiddleware>();
 
+// =================================================================================
+// ================================ Users Endpoints ================================
 // POST: Crear un usuario
 app.MapPost("/users", async (UserDTO dto, IMediator mediator) =>
 {
@@ -124,6 +127,8 @@ app.MapDelete("/user/{id:int}", async (int id, IMediator mediator) =>
 })
 .WithName("DeleteUser");
 
+// =====================================================================================
+// ================================ Addresses Endpoints ================================
 // POST: Crear Address para usuario
 app.MapPost("/users/{userId:int}/addresses", async (int userId, AddressDTO dto, IMediator mediator) =>
 {
@@ -166,6 +171,8 @@ app.MapDelete("/addresses/{id:int}", async (int id, IMediator mediator) =>
 })
 .WithName("DeleteAddress");
 
+// ====================================================================================
+// ================================ Currency Endpoints ================================
 // POST: Crear una currency / moneda
 app.MapPost("/currencies", async (CurrencyDTO dto, IMediator mediator) =>
 {
@@ -193,5 +200,15 @@ app.MapPost("/currency/convert", async (CurrencyConversionDTO dto, IMediator med
     return Results.Ok(converted);
 })
 .WithName("CalculateConversion");
+
+// PUT: Actualizar currency segun ID
+app.MapPut("/currencies/{id:int}", async (int id, CurrencyDTO dto, IMediator mediator) =>
+{
+    var command = new UpdateCurrencyCommand(id, dto);
+    var updated = await mediator.Send(command);
+    return updated
+        ? Results.NoContent()
+        : Results.NotFound(new { message = $"Currency con ID {id} no encontrado." });
+});
 
 app.Run();
