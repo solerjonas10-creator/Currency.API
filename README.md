@@ -14,16 +14,16 @@ COMO DESPLEGAR:
 1. Clona el repositorio o descomprime el archivo.
 2. Abre una terminal en la carpeta raíz del proyecto.
 3. Restaura las dependencias: dotnet restore
-4. El proyecto usa Entity Framework con SQLite 
-4.1 Instala la herramienta global: dotnet ef migrations add NombreDeLaMigracion
-4.2 Crear Migracion de la BD: dotnet ef migrations add NombreDeLaMigracion
-4.3 Aplicar la migracion: dotnet ef database update
-5. Ejecutar: dotnet run
-6. Abrir en el navegador http://localhost:5015/swagger (O la direccion que se muestra en el archivo launchSettings.json)
-7. Para poder usar los EndPoints hacer clic en el boton [Authorize]
-8. Pedira el ApiKey, que por defecto es "12345" para pruebas... (o revisar el archivo appsettings.json)
-9. Click en [Authorize] y luego en [Close]
-10. Listo ya es posible probar todos los EndPoints
+4. El proyecto usa Entity Framework con SQLite
+5. Instala la herramienta global: dotnet ef migrations add NombreDeLaMigracion
+6. Crear Migracion de la BD: dotnet ef migrations add NombreDeLaMigracion
+7. Aplicar la migracion: dotnet ef database update
+8. Ejecutar: dotnet run
+9. Abrir en el navegador http://localhost:5015/swagger (O la direccion que se muestra en el archivo launchSettings.json)
+10. Para poder usar los EndPoints hacer clic en el boton [Authorize]
+11. Pedira el ApiKey, que por defecto es "12345" para pruebas... (o revisar el archivo appsettings.json)
+12. Click en [Authorize] y luego en [Close]
+13. Listo ya es posible probar todos los EndPoints
 
 IMPLEMENTADOS:
 CRUD Users completo: Crear, Modificar, Listar y Eliminar.
