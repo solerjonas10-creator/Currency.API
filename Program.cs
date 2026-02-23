@@ -1,7 +1,9 @@
-using Currency.API.Application.Users.Commands;
-using Currency.API.Application.Users.Queries;
 using Currency.API.Application.Addresses.Commands;
 using Currency.API.Application.Addresses.Queries;
+using Currency.API.Application.Currency.Conversion;
+using Currency.API.Application.Currency.Queries;
+using Currency.API.Application.Users.Commands;
+using Currency.API.Application.Users.Queries;
 using Currency.API.Data;
 using Currency.API.Middleware;
 using Currency.API.Models;
@@ -10,8 +12,7 @@ using Currency.API.Validators;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Currency.API.Application.Currency.Queries;
-using Currency.API.Application.Currency.Conversion;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,21 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    {
+        Description = "Ingresa tu llave de API",
+        In = ParameterLocation.Header,
+        Name = "X-API-KEY",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("ApiKey", document)] = new List<string>()
+    });
+});
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -56,7 +71,7 @@ app.UseExceptionHandler();
 app.UseMiddleware<ApiKeyMiddleware>();
 
 // POST: Crear un usuario
-app.MapPost("/POST/users", async (UserDTO dto, IMediator mediator) =>
+app.MapPost("/users", async (UserDTO dto, IMediator mediator) =>
 {
     var command = new CreateUserCommand(dto);
     var userId = await mediator.Send(command);
@@ -65,7 +80,7 @@ app.MapPost("/POST/users", async (UserDTO dto, IMediator mediator) =>
 .WithName("CreateUser");
 
 // GET: Listar usuarios
-app.MapGet("/GET/users", async (bool? isActive, IMediator mediator) =>
+app.MapGet("/users", async (bool? isActive, IMediator mediator) =>
 {
     var query = new GetUsersQuery(isActive);
     var users = await mediator.Send(query);
@@ -75,7 +90,7 @@ app.MapGet("/GET/users", async (bool? isActive, IMediator mediator) =>
 .WithName("GetUsers");
 
 // GET: Obtener usuario segun ID
-app.MapGet("/GET/users/{id:int}", async (int id, IMediator mediator) =>
+app.MapGet("/users/{id:int}", async (int id, IMediator mediator) =>
 {
     var user = await mediator.Send(new GetUserByIdQuery(id));
 
@@ -87,7 +102,7 @@ app.MapGet("/GET/users/{id:int}", async (int id, IMediator mediator) =>
 .WithName("GetUserById");
 
 // PUT: Actualizar usuario segun ID
-app.MapPut("/PUT/user/{id:int}", async (int id, UpdateUserDTO dto, IMediator mediator) =>
+app.MapPut("/user/{id:int}", async (int id, UpdateUserDTO dto, IMediator mediator) =>
 {
     var command = new UpdateUserCommand(id, dto);
     var updated = await mediator.Send(command);
@@ -99,7 +114,7 @@ app.MapPut("/PUT/user/{id:int}", async (int id, UpdateUserDTO dto, IMediator med
 .WithName("UpdateUser");
 
 // DELETE: Eliminar usuario segun ID
-app.MapDelete("/DELETE/user/{id:int}", async (int id, IMediator mediator) =>
+app.MapDelete("/user/{id:int}", async (int id, IMediator mediator) =>
 {
     var deleted = await mediator.Send(new DeleteUserCommand(id));
 
@@ -110,7 +125,7 @@ app.MapDelete("/DELETE/user/{id:int}", async (int id, IMediator mediator) =>
 .WithName("DeleteUser");
 
 // POST: Crear Address para usuario
-app.MapPost("/POST/users/{userId:int}/addresses", async (int userId, AddressDTO dto, IMediator mediator) =>
+app.MapPost("/users/{userId:int}/addresses", async (int userId, AddressDTO dto, IMediator mediator) =>
 {
     var command = new CreateAddressCommand(userId, dto);
     var addressId = await mediator.Send(command);
@@ -119,7 +134,7 @@ app.MapPost("/POST/users/{userId:int}/addresses", async (int userId, AddressDTO 
 .WithName("CreateAddressForUser");
 
 // GET: Listar Addresses de un usuario
-app.MapGet("/GET/users/{userId:int}/addresses", async (int userId, IMediator mediator) =>
+app.MapGet("/users/{userId:int}/addresses", async (int userId, IMediator mediator) =>
 {
     var query = new GetAddressesQuery(userId);
     var addresses = await mediator.Send(query);
@@ -129,7 +144,7 @@ app.MapGet("/GET/users/{userId:int}/addresses", async (int userId, IMediator med
 .WithName("GetUserAddresses");
 
 // PUT: Actualizar Address segun ID
-app.MapPut("/PUT/addresses/{id:int}", async (int id, AddressDTO dto, IMediator mediator) =>
+app.MapPut("/addresses/{id:int}", async (int id, AddressDTO dto, IMediator mediator) =>
 {
     var command = new UpdateAddressCommand(id, dto);
     var updated = await mediator.Send(command);
@@ -141,7 +156,7 @@ app.MapPut("/PUT/addresses/{id:int}", async (int id, AddressDTO dto, IMediator m
 .WithName("UpdateAddress");
 
 // DELETE: Eliminar Address segun ID
-app.MapDelete("/DELETE/addresses/{id:int}", async (int id, IMediator mediator) =>
+app.MapDelete("/addresses/{id:int}", async (int id, IMediator mediator) =>
 {
     var deleted = await mediator.Send(new DeleteAddressCommand(id));
 
@@ -152,7 +167,7 @@ app.MapDelete("/DELETE/addresses/{id:int}", async (int id, IMediator mediator) =
 .WithName("DeleteAddress");
 
 // POST: Crear una currency / moneda
-app.MapPost("/POST/currencies", async (CurrencyDTO dto, IMediator mediator) =>
+app.MapPost("/currencies", async (CurrencyDTO dto, IMediator mediator) =>
 {
     var command = new CreateCurrencyCommand(dto);
     var currencyId = await mediator.Send(command);
@@ -161,7 +176,7 @@ app.MapPost("/POST/currencies", async (CurrencyDTO dto, IMediator mediator) =>
 .WithName("CreateCurrency");
 
 // GET: Listar currencies / monedas
-app.MapGet("/GET/currencies", async (IMediator mediator) =>
+app.MapGet("/currencies", async (IMediator mediator) =>
 {
     var query = new GetCurrenciesQuery();
     var currencies = await mediator.Send(query);
@@ -171,7 +186,7 @@ app.MapGet("/GET/currencies", async (IMediator mediator) =>
 .WithName("GetCurrencies");
 
 // POST: Conversion de divisas
-app.MapPost("/POST/currency/convert", async (CurrencyConversionDTO dto, IMediator mediator) => {
+app.MapPost("/currency/convert", async (CurrencyConversionDTO dto, IMediator mediator) => {
     var convert = new CurrencyConversionCalculate(dto);
     var converted = await mediator.Send(convert);
 
