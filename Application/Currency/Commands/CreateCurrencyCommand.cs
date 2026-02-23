@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
-namespace Currency.API.Application.Users.Commands
+namespace Currency.API.Application.Currency.Commands
 {
     public record CreateCurrencyCommand(CurrencyDTO currencyDTO) : IRequest<int>;
 

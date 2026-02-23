@@ -1,7 +1,7 @@
-﻿using Currency.API.Application.Users.Commands;
-using FluentValidation;
+﻿using FluentValidation;
 using Currency.API.Data;
 using Microsoft.EntityFrameworkCore;
+using Currency.API.Application.Currency.Commands;
 
 namespace Currency.API.Validators
 {
