@@ -16,7 +16,6 @@ public class ApiKeyMiddleware
         if (!context.Request.Headers.TryGetValue(APIKEYNAME, out var extractedApiKey))
         {
             context.Response.StatusCode = 401;
-            context.Response.ContentType = "Unauthorized";
             await context.Response.WriteAsync("Falta la API Key.");
             return;
         }
@@ -28,7 +27,6 @@ public class ApiKeyMiddleware
         if (!apiKey!.Equals(extractedApiKey))
         {
             context.Response.StatusCode = 401;
-            context.Response.ContentType = "Unauthorized";
             await context.Response.WriteAsync("API Key inválida.");
             return;
         }
