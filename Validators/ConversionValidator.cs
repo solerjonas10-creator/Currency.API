@@ -20,7 +20,7 @@ namespace Currency.API.Validators
                     await _db.Currencies.AnyAsync(c => c.Code == code, cancellation)
                 ).WithMessage("El codigo de fromCurrencyCode no existe.");
 
-            RuleFor(x => x.conversionDTO.fromCurrencyCode)
+            RuleFor(x => x.conversionDTO.toCurrencyCode)
                 .NotEmpty()
                 .MustAsync(async (code, cancellation) =>
                     await _db.Currencies.AnyAsync(c => c.Code == code, cancellation)
