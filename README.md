@@ -28,7 +28,7 @@ COMO DESPLEGAR:
 IMPLEMENTADOS:
 CRUD Users completo: Crear, Modificar, Listar y Eliminar.
 CRUD Addresses completo: Crear, Modificar, Listar por UserId, y Eliminar.
-CRUD Currencies completo segun requerimientos: Crear, y Listar. (Si bien no fue especificado queda pendiente implementar Update y Delete)
+CRUD Currencies completo: Crear, Listar, Modificar y eliminar. (Si bien no fue especificado se implementó Update y Delete para más dinamismo)
 Conversion de monedas: Currencies
 Validaciones via FluentValidation
 Middleware de seguridad con APIKEY de prueba = 12345
