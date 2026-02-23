@@ -35,7 +35,6 @@ namespace Currency.API.Validators
             RuleFor(x => x.addressDTO.Street).NotEmpty();
             RuleFor(x => x.addressDTO.City).NotEmpty();
             RuleFor(x => x.addressDTO.Country).NotEmpty();
-            RuleFor(x => x.addressDTO.ZipCode).NotEmpty();
         }
     }
 }
