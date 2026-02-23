@@ -15,9 +15,9 @@ COMO DESPLEGAR:
 2. Abre una terminal en la carpeta raíz del proyecto.
 3. Restaura las dependencias: dotnet restore
 4. El proyecto usa Entity Framework con SQLite 
-   4.1 Instala la herramienta global: dotnet ef migrations add NombreDeLaMigracion
-   4.2 Crear Migracion de la BD: dotnet ef migrations add NombreDeLaMigracion
-   4.3 Aplicar la migracion: dotnet ef database update
+4.1 Instala la herramienta global: dotnet ef migrations add NombreDeLaMigracion
+4.2 Crear Migracion de la BD: dotnet ef migrations add NombreDeLaMigracion
+4.3 Aplicar la migracion: dotnet ef database update
 5. Ejecutar: dotnet run
 6. Abrir en el navegador http://localhost:5015/swagger (O la direccion que se muestra en el archivo launchSettings.json)
 7. Para poder usar los EndPoints hacer clic en el boton [Authorize]
